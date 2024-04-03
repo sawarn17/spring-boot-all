@@ -19,7 +19,6 @@ public class RabbitMQController {
 
 	@PostMapping(value = "/send", produces = "application/json", consumes = "application/json")
 	public ResponseEntity<String> sendMessage(@RequestBody Message payload) {
-		rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
 		rabbitTemplate.convertAndSend("message-queue", payload);
 		return ResponseEntity.ok("Message sent successfully");
 	}
