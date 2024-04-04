@@ -3,6 +3,7 @@ package com.appinventiv.aopservices;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,14 @@ public class LoggingAspect {
 	Logger log = LoggerFactory.getLogger(LoggingAspect.class);
 
 	// here we provide the package in terms 
+	/*
+	 * Here first start mentioned any return type
+	 * then we have to mentioned root package ==com.appinventiv.controller
+	 * then if we applied on class then pass the class name like UserController other wise * for all classes
+	 * then we have to pass the method name where i want to applied them other wise we can metioned * for entire things
+	 * (..): This is a wildcard that matches any number of parameters (zero or more) of any type.
+	 * 
+	 */
 	@Pointcut(value = "execution(* com.appinventiv.controller.UserController.findAllUsers(..) )")
 	public void myPointcut() {
 
@@ -36,4 +45,9 @@ public class LoggingAspect {
 		log.info(className + " : " + methodName + "()" + "Response : " + mapper.writeValueAsString(object));
 		return object;
 	}
+	
+	@Before("execution(* com.appinventiv.controller.UserController.updateUserName(..))")
+    public void logBefore() {
+        log.info("Before method execution");
+    } 
 }

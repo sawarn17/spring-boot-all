@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.appinventiv.dto.UserDTO;
 import com.appinventiv.entity.User;
 import com.appinventiv.repository.UserRepository;
 
@@ -61,6 +64,21 @@ public class UserService {
 		 List<User> allUsers = userRepository.findAll();
 		 log.info("Getting List of users by thread name "+ Thread.currentThread().getName());
 		 return CompletableFuture.completedFuture(allUsers);
+	 }
+	 
+	 public User updateUser(UserDTO user) {
+		 Optional<User> getUser = userRepository.findById(user.getId());
+		 if(getUser.isPresent()) {
+			 User userStream = getUser.get();
+			 if(Objects.nonNull(userStream.getEmail())){
+				 user.setEmail(user.getEmail());
+			 }
+			 if(Objects.nonNull(userStream.getName())) {
+				 user.setName(user.getName());
+			 }
+			 return userRepository.save(userStream);
+		 }
+		 return null;
 	 }
 
 }
